@@ -1,0 +1,40 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+
+
+
+#calculatorShell {
+    background-color: cornflowerblue;
+    width: 20vw;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 300px;
+    gap: 3px;
+    padding: 0;
+}
+
+#screen {
+    flex: 1 0 100%;
+    background-color: black;
+    color: antiquewhite;
+    font-size: 40px;
+    align-self: center;
+    text-align: right;
+}
+
+#clearButton {
+
+    flex: 1 0 100%;
+}
+
+#calculatorShell button {
+    flex: 1 0 20%;
+}   
