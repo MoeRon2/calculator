@@ -1,5 +1,4 @@
-const calculator = require('./calculator.js');
-
+import calculator from "./calculator.js";
 
 
 describe("Addition", () => {
