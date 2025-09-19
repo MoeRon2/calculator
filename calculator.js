@@ -1,51 +1,50 @@
+const operators = ["+", "-", "*", "/"];
+
 const calculatorShell = document.querySelector("#calculatorShell");
 const screen = document.querySelector("#screen");
-let operation = "";
-const operators = ["+", "-", "*", "/"];
+const clearButton = document.querySelector("#clearButton");
+
+screen.textContent = "";
+let operationText = "";
+
+let ongoingCalculation = {
+  firstNumber: "",
+  firstOperator: "",
+  secondNumber: "",
+  secondOperator: "",
+  operatorCount: 0
+};
 
 
 calculatorShell.addEventListener("click", (event) => {
-  const target = event.target;
-  const text = target.textContent;
-  let checkOperator = operators.includes(text) ? text : "";
+  let buttonClicked = event.target;
+  const buttonClickedValue = buttonClicked.textContent;
 
-  if (checkOperator) {
-    operation += ` ${checkOperator} `;
-  }
-  else if (text === "Clear") {
-    operation = "";
-  }
-  else if (text === "=") {
-    checkOperation(operation);
-  }
-  else {
-    operation += target.textContent;
+  operationText += buttonClickedValue;
+  screen.textContent += buttonClickedValue;
+
+  if (buttonClicked.classList[0] === "operator") {
+    ongoingCalculation.operatorCount++;
+    if (ongoingCalculation.operatorCount === 2) {
+      let secondNumberWithOperator = operationText.split(ongoingCalculation.firstOperator)[1];
+      ongoingCalculation.secondNumber = secondNumberWithOperator.split(buttonClickedValue)[0];
+      ongoingCalculation.secondOperator = buttonClickedValue;
+    }
+    else {
+      ongoingCalculation.firstNumber = operationText.split(buttonClickedValue, maxsplit = 1)[0];
+      ongoingCalculation.firstOperator = buttonClickedValue;
+    }
+    console.log(ongoingCalculation);
   }
 
-  console.log(`Button pressed ${text}`);
-  console.log(`Current operation ${operation}`);
-  screen.textContent = operation;
 })
 
 
-function checkOperation(operationText) {
-  const operationSplit = operationText.split(" ");
-  if (operationSplit.length !== 3) {
-    return "ERROR"; 
-  }
-  const [firstNumber, operator, secondNumber] = operationSplit;
-  if (operators.includes(operator)) {
-    let result = operate(operator, parseInt(firstNumber), parseInt(secondNumber));
-    console.log(result);
-  }
-  else {
-    return "ERROR";
-  }
-  
-}
 
 
 
+
+// Logic
 function add(a, b) {
   return a + b;
 }

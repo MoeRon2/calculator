@@ -17,6 +17,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     flex-basis: 300px;
+    flex: 0 0 50%;
     gap: 3px;
     padding: 0;
 }
