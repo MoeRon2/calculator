@@ -20,8 +20,23 @@ calculatorShell.addEventListener("click", (event) => {
   let buttonClicked = event.target;
   const buttonClickedValue = buttonClicked.textContent;
 
+  if (buttonClickedValue === "Clear") {
+    screen.textContent = "";
+    operationText = "";
+    ongoingCalculation = {
+      firstNumber: "",
+      firstOperator: "",
+      secondNumber: "",
+      secondOperator: "",
+      operatorCount: 0
+    };
+    return;
+  }
+
   operationText += buttonClickedValue;
-  screen.textContent += buttonClickedValue;
+  if (buttonClicked.classList[0] !== "operator") {
+    screen.textContent += buttonClickedValue;
+  }
 
   if (buttonClicked.classList[0] === "operator") {
     ongoingCalculation.operatorCount++;
@@ -34,9 +49,20 @@ calculatorShell.addEventListener("click", (event) => {
       ongoingCalculation.firstNumber = operationText.split(buttonClickedValue, maxsplit = 1)[0];
       ongoingCalculation.firstOperator = buttonClickedValue;
     }
+    screen.textContent = "";
     console.log(ongoingCalculation);
   }
 
+  if (ongoingCalculation.operatorCount == 2) {
+    ongoingCalculation.operatorCount = 0;
+    ongoingCalculation.firstNumber = operate(ongoingCalculation.firstOperator, ongoingCalculation.firstNumber, ongoingCalculation.secondNumber, ongoingCalculation)
+    ongoingCalculation.firstOperator = ongoingCalculation.secondOperator;
+
+    operationText = ongoingCalculation.firstNumber;
+    screen.textContent = ongoingCalculation.firstNumber;
+
+    console.log(operationText);
+  }
 })
 
 
@@ -72,6 +98,8 @@ function divide(a, b) {
 
 function operate(operator, a, b) {
   let result;
+  a = parseInt(a);
+  b = parseInt(b);
   switch (operator) {
     case "+":
       result = add(a, b);
