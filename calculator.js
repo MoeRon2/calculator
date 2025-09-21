@@ -11,6 +11,9 @@ let operatorClicked = false;
 
 let lastCharacter = "";
 
+screen.textContent = "";
+
+
 
 calculatorShell.addEventListener("click", (event) => {
   let buttonClicked = event.target;
