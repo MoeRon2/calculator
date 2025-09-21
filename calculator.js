@@ -9,18 +9,37 @@ let secondNumber = "" ;
 let operator;
 let operatorClicked = false;
 
+let lastCharacter = "";
+
 
 calculatorShell.addEventListener("click", (event) => {
   let buttonClicked = event.target;
   console.log(buttonClicked.textContent);
+  
+  if (buttonClicked.classList[0] === "operator" && lastCharacter === buttonClicked.textContent) {
+    return;
+  }
+  
+  lastCharacter = buttonClicked.textContent;
+
+  
+
   writeToDisplay(buttonClicked);
 
 
-
-
+ 
   if (operatorClicked && buttonClicked.classList[0] !== "operator") {
     secondNumber += buttonClicked.innerText;
   }
+
+  else if (buttonClicked.innerText === "=") {
+    let result = operate(operator, Number.parseFloat(firstNumber), Number.parseFloat(secondNumber));
+    screen.innerText = result;
+    firstNumber = result;
+    secondNumber = "";
+    operatorClicked = false;
+  }
+
 
   else if (operatorClicked && buttonClicked.classList[0] === "operator") {
     let result = operate(operator, Number.parseFloat(firstNumber), Number.parseFloat(secondNumber));
@@ -28,7 +47,6 @@ calculatorShell.addEventListener("click", (event) => {
     operator = buttonClicked.innerText;
     firstNumber = result;
     secondNumber = "";
-    operatorClicked = false;
     console.log(result);
 
   }
@@ -48,6 +66,9 @@ calculatorShell.addEventListener("click", (event) => {
 function writeToDisplay(buttonClicked) {
   if (buttonClicked.textContent === "AC") {
     screen.textContent = 0;
+    firstNumber = "";
+    secondNumber = "";
+    operatorClicked = false;
   }
   else if (operatorClicked) {
     return;
@@ -90,7 +111,7 @@ function multiply(a, b) {
 
 function divide(a, b) {
   if (b === 0) {
-    return "ERROR";
+    return "Can't divide by 0";
   }
   const result = a / b;
   if (Number.isInteger(result)) {
