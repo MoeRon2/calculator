@@ -4,70 +4,75 @@ const calculatorShell = document.querySelector("#calculatorShell");
 const screen = document.querySelector("#screen");
 const clearButton = document.querySelector("#clearButton");
 
-screen.textContent = "";
-let operationText = "";
-
-let ongoingCalculation = {
-  firstNumber: "",
-  firstOperator: "",
-  secondNumber: "",
-  secondOperator: "",
-  operatorCount: 0
-};
+let firstNumber;
+let secondNumber = "" ;
+let operator;
+let operatorClicked = false;
 
 
 calculatorShell.addEventListener("click", (event) => {
   let buttonClicked = event.target;
-  const buttonClickedValue = buttonClicked.textContent;
+  console.log(buttonClicked.textContent);
+  writeToDisplay(buttonClicked);
 
-  if (buttonClickedValue === "Clear") {
-    screen.textContent = "";
-    operationText = "";
-    ongoingCalculation = {
-      firstNumber: "",
-      firstOperator: "",
-      secondNumber: "",
-      secondOperator: "",
-      operatorCount: 0
-    };
+
+
+
+  if (operatorClicked && buttonClicked.classList[0] !== "operator") {
+    secondNumber += buttonClicked.innerText;
+  }
+
+  else if (operatorClicked && buttonClicked.classList[0] === "operator") {
+    let result = operate(operator, Number.parseFloat(firstNumber), Number.parseFloat(secondNumber));
+    screen.innerText = result;
+    operator = buttonClicked.innerText;
+    firstNumber = result;
+    secondNumber = "";
+    operatorClicked = false;
+    console.log(result);
+
+  }
+
+  else if (buttonClicked.classList[0] === "operator") {
+    captureValues(buttonClicked);
+  }
+  
+  else {
+    return
+  }
+  
+
+});
+
+
+function writeToDisplay(buttonClicked) {
+  if (buttonClicked.textContent === "AC") {
+    screen.textContent = 0;
+  }
+  else if (operatorClicked) {
     return;
   }
-
-  operationText += buttonClickedValue;
-  if (buttonClicked.classList[0] !== "operator") {
-    screen.textContent += buttonClickedValue;
-  }
-
-  if (buttonClicked.classList[0] === "operator") {
-    ongoingCalculation.operatorCount++;
-    if (ongoingCalculation.operatorCount === 2) {
-      let secondNumberWithOperator = operationText.split(ongoingCalculation.firstOperator)[1];
-      ongoingCalculation.secondNumber = secondNumberWithOperator.split(buttonClickedValue)[0];
-      ongoingCalculation.secondOperator = buttonClickedValue;
-    }
-    else {
-      ongoingCalculation.firstNumber = operationText.split(buttonClickedValue, maxsplit = 1)[0];
-      ongoingCalculation.firstOperator = buttonClickedValue;
-    }
+  // When starting from 0, clear everything and add the button value
+  else if (screen.textContent === "0") {
     screen.textContent = "";
-    console.log(ongoingCalculation);
+    screen.textContent += buttonClicked.textContent;
+  }
+  else if (buttonClicked.classList[0] === "operator") {
+    return;
+  }
+  else {
+    screen.textContent += buttonClicked.textContent;
   }
 
-  if (ongoingCalculation.operatorCount == 2) {
-    ongoingCalculation.operatorCount = 0;
-    ongoingCalculation.firstNumber = operate(ongoingCalculation.firstOperator, ongoingCalculation.firstNumber, ongoingCalculation.secondNumber, ongoingCalculation)
-    ongoingCalculation.firstOperator = ongoingCalculation.secondOperator;
-
-    operationText = ongoingCalculation.firstNumber;
-    screen.textContent = ongoingCalculation.firstNumber;
-
-    console.log(operationText);
-  }
-})
+}
 
 
-
-
+function captureValues(buttonClicked) {
+  operator = buttonClicked.textContent;
+  firstNumber = screen.textContent.split(operator)[0];
+  operatorClicked = true;
+  console.log(`${operator} ${firstNumber}`);
+}
 
 
 // Logic
